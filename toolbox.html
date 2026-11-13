@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>工具箱 - 尼克松赞干布的个人网站</title>
+  <meta name="description" content="NickWang 的实用小工具合集">
+  <script>try{if(localStorage.getItem('nickwang-darkroom')==='1')document.documentElement.classList.add('darkroom')}catch(e){}</script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="logo" href="index.html">NICK<b>WANG</b></a>
+      <div class="nav-right">
+      <nav id="nav">
+        <a href="index.html">首页</a>
+        <a href="blog.html">知识文档</a>
+        <a href="cases.html">案例经验</a>
+        <a href="projects.html">开源项目</a>
+        <a href="toolbox.html" class="active">工具箱</a>
+      </nav>
+      <button class="darkroom-btn" id="darkroomBtn" type="button" aria-pressed="false" title="进入暗房 / 回到明室">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path class="bulb-off" d="M12 3.2c-3.6 0-6.2 2.7-6.2 5.7 0 2 1.1 3.2 2.1 4.3.6.7 1.2 1.4 1.4 2.4h5.4c.2-1 .8-1.7 1.4-2.4 1-1.1 2.1-2.3 2.1-4.3 0-3-2.6-5.7-6.2-5.7z"/>
+          <path class="bulb-off" d="M9.8 18.4h4.4M10.5 20.6h3"/>
+          <g class="bulb-rays">
+            <line x1="2.2" y1="3.6" x2="4.4" y2="5.4"/>
+            <line x1="21.8" y1="3.6" x2="19.6" y2="5.4"/>
+            <line x1="1.2" y1="9.2" x2="3.6" y2="9.2"/>
+            <line x1="22.8" y1="9.2" x2="20.4" y2="9.2"/>
+          </g>
+        </svg>
+        <span class="t-off">暗房</span><span class="t-on">开灯</span>
+      </button>
+      <button class="menu-btn" id="menuBtn">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <h1>工具箱 · TOOLBOX</h1>
+    <p class="muted">正在整理中——这里将集成电阻色环、dB 换算、BPM↔延迟等实用小工具。敬请期待。</p>
+    <p class="empty" style="margin-top:40px;">工具箱尚未开发，此处为占位页面。</p>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <span>© <span id="y"></span> NICKWANG</span>
+      <span>个人网站 · 记录生活 · GITHUB PAGES</span>
+    </div>
+  </footer>
+
+  <script src="js/core.js"></script>
+  <script src="js/site.js"></script>
+  <script src="js/darkroom.js"></script>
+</body>
+</html>

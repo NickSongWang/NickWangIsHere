@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>工作台 - 尼克松赞干布的个人网站</title>
+  <meta name="description" content="NickWang 的 DIY 电子开源项目：电路、固件、外壳，可复刻可改造">
+  <script>try{if(localStorage.getItem('nickwang-darkroom')==='1')document.documentElement.classList.add('darkroom')}catch(e){}</script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="logo" href="index.html">NICK<b>WANG</b></a>
+      <div class="nav-right">
+      <nav id="nav">
+        <a href="index.html">首页</a>
+        <a href="blog.html">知识文档</a>
+        <a href="cases.html">案例经验</a>
+        <a href="projects.html" class="active">开源项目</a>
+        <a href="toolbox.html">工具箱</a>
+      </nav>
+      <button class="darkroom-btn" id="darkroomBtn" type="button" aria-pressed="false" title="进入暗房 / 回到明室">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path class="bulb-off" d="M12 3.2c-3.6 0-6.2 2.7-6.2 5.7 0 2 1.1 3.2 2.1 4.3.6.7 1.2 1.4 1.4 2.4h5.4c.2-1 .8-1.7 1.4-2.4 1-1.1 2.1-2.3 2.1-4.3 0-3-2.6-5.7-6.2-5.7z"/>
+          <path class="bulb-off" d="M9.8 18.4h4.4M10.5 20.6h3"/>
+          <g class="bulb-rays">
+            <line x1="2.2" y1="3.6" x2="4.4" y2="5.4"/>
+            <line x1="21.8" y1="3.6" x2="19.6" y2="5.4"/>
+            <line x1="1.2" y1="9.2" x2="3.6" y2="9.2"/>
+            <line x1="22.8" y1="9.2" x2="20.4" y2="9.2"/>
+          </g>
+        </svg>
+        <span class="t-off">暗房</span><span class="t-on">开灯</span>
+      </button>
+      <button class="menu-btn" id="menuBtn">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container pj-main">
+    <h1>工作台 · PROJECTS</h1>
+    <p class="pj-sub">DIY 电子开源项目——电路、固件、外壳全部公开，<b>可复刻、可改造</b>。每卷都是一个独立项目夹：md + 图片 + 素材，仓库链接在详情页。</p>
+    <p class="pj-stats" id="pj-stats">正在清点工作台…</p>
+
+    <div class="pj-toolbar">
+      <div class="pj-seg" id="pj-seg">
+        <button type="button" data-s="all" class="act">全部</button>
+        <button type="button" data-s="dev">显影中</button>
+        <button type="button" data-s="open">已开源</button>
+        <button type="button" data-s="hold">搁置</button>
+      </div>
+      <input class="pj-search" id="pj-search" type="search" placeholder="搜项目 / 技术栈…" autocomplete="off">
+      <div class="pj-tags" id="pj-tags"></div>
+    </div>
+
+    <div class="pj-grid" id="pj-grid"></div>
+    <p class="pj-count" id="pj-count"></p>
+    <p class="empty" id="pj-loading">正在加载项目…</p>
+    <p class="empty" id="pj-error" style="display:none;"></p>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <span>© <span id="y"></span> NICKWANG</span>
+      <span>个人网站 · 记录生活 · GITHUB PAGES</span>
+    </div>
+  </footer>
+
+  <script src="js/core.js"></script>
+  <script src="js/site.js"></script>
+  <script src="js/projects.js"></script>
+  <script src="js/darkroom.js"></script>
+</body>
+</html>

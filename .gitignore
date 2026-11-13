@@ -1,0 +1,13 @@
+# 本地工具与虚拟环境，不提交到仓库
+/tools/
+/.venv/
+/.gh-config/
+
+# 本地源文档与转换脚本（不随网站发布）
+/知识分享文档/
+/scripts/
+
+# 系统文件
+.DS_Store
+Thumbs.db
+desktop.ini
