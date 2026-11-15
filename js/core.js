@@ -6,7 +6,7 @@
 window.NW = (function () {
   'use strict';
 
-  var REPO = 'NickSongWang/NickWang.Website';
+  var REPO = 'NickSongWang/NickWangIsHere';
   var BRANCH = 'main';
 
   // 本地预览（localhost / 127.0.0.1）走相对路径，线上走 raw.githubusercontent.com
