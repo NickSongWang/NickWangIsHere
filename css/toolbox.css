@@ -1,0 +1,124 @@
+/* ============================================================
+   工具箱 · 全屏应用式界面（暗房工作台）
+   复用 style.css 的 CSS 变量：--bg / --panel / --line / --txt /
+   --muted / --accent / --ink / --serif / --sans
+   暗房红灯模式由全局光罩自动覆盖，无需额外适配
+   ============================================================ */
+
+/* 工作区高度 = 视口 - 页头 62px */
+.toolbox {
+  height: calc(100vh - 62px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* 舞台（占满剩余空间） */
+.tb-stage { flex: 1; position: relative; overflow: hidden; min-height: 0; }
+
+/* 启动器层：工具卡片铺满舞台 */
+.tb-launcher { position: absolute; inset: 0; padding: 26px; overflow: auto; }
+.tb-tip { font-size: 12px; color: var(--muted); letter-spacing: 1px; margin: 2px 2px 18px; }
+.tb-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 16px; padding-bottom: 8px; }
+.tb-card {
+  background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
+  padding: 22px 18px; cursor: pointer; transition: border-color .2s, transform .2s, box-shadow .2s;
+  user-select: none; min-height: 130px;
+}
+.tb-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+.tb-card .ic { font-size: 26px; color: var(--accent); font-weight: 500; height: 34px; }
+.tb-card h3 { font-size: 16px; font-weight: 500; margin: 10px 0 5px; }
+.tb-card p { font-size: 12px; color: var(--muted); line-height: 1.5; }
+.tb-card.open { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; }
+
+/* 窗口层：全屏铺满舞台，覆盖卡片 */
+.tb-win {
+  position: absolute; inset: 0; z-index: 10; display: flex; flex-direction: column;
+  background: var(--bg);
+}
+.tb-win .bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 16px; background: var(--panel); border-bottom: 1px solid var(--line);
+  flex-shrink: 0;
+}
+.tb-win .bar .ttl { font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 9px; }
+.tb-win .bar .ttl .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); transition: background .2s; }
+.tb-win.active .bar .ttl .dot { background: var(--accent); }
+.tb-win .bar .btns { display: flex; gap: 7px; }
+.tb-win .bar button {
+  width: 28px; height: 28px; border-radius: 7px; border: 1px solid transparent;
+  background: transparent; color: var(--muted); cursor: pointer; font-size: 16px; line-height: 1;
+  transition: all .12s; display: flex; align-items: center; justify-content: center;
+}
+.tb-win .bar button:hover { border-color: var(--accent); color: var(--txt); background: rgba(212,162,78,.1); }
+.tb-win .bar .x:hover { color: #e07a5f; border-color: rgba(224,122,95,.5); background: rgba(224,122,95,.12); }
+.tb-win .body { flex: 1; overflow: auto; padding: 32px 26px 40px; }
+
+/* 任务栏 */
+.tb-dock {
+  flex-shrink: 0; display: flex; gap: 10px; margin: 14px 22px 16px; padding: 12px 14px;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
+  min-height: 62px; flex-wrap: wrap;
+}
+.tb-dock .cap { width: 100%; font-size: 11px; letter-spacing: 2px; color: var(--muted); margin-bottom: 2px; }
+.tb-dock .dock-item {
+  position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px;
+  min-width: 62px; padding: 8px 10px; border-radius: 10px; border: 1px solid transparent;
+  background: transparent; color: var(--muted); cursor: pointer; transition: all .15s;
+  font-family: var(--sans);
+}
+.tb-dock .dock-item:hover { background: rgba(212,162,78,.08); color: var(--txt); }
+.tb-dock .dock-item .ic { font-size: 18px; }
+.tb-dock .dock-item .nm { font-size: 11px; }
+.tb-dock .dock-item .st { position: absolute; top: 5px; right: 8px; width: 6px; height: 6px; border-radius: 50%; background: transparent; }
+.tb-dock .dock-item.open { color: var(--txt); }
+.tb-dock .dock-item.open .ic { color: var(--accent); }
+.tb-dock .dock-item.open.active .st { background: var(--accent); }
+.tb-dock .dock-item.min .ic { color: #5DCAA5; }
+.tb-dock .dock-item.min .st { background: #5DCAA5; opacity: .7; }
+.tb-dock .dock-empty { font-size: 12px; color: var(--muted); align-self: center; }
+
+/* ============================================================
+   dB 换算器（工具内容）
+   ============================================================ */
+.db-wrap { max-width: 760px; margin: 0 auto; }
+.db-head { text-align: center; margin-bottom: 28px; }
+.db-head .db-ic { font-size: 44px; color: var(--accent); font-weight: 500; line-height: 1; }
+.db-head h2 { font-family: var(--serif); font-size: 24px; font-weight: 400; letter-spacing: 3px; margin: 14px 0 8px; }
+.db-head p { font-size: 13px; color: var(--muted); }
+
+.db-sec {
+  background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
+  padding: 20px 22px; margin-bottom: 18px;
+}
+.db-sec h3 {
+  font-size: 13px; letter-spacing: 3px; color: var(--accent); font-weight: 500;
+  margin-bottom: 16px; display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap;
+}
+.db-sec h3 span { font-size: 11px; color: var(--muted); letter-spacing: 0; font-weight: 400; }
+
+.db-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+.db-grid label { display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: var(--muted); }
+.db-grid input {
+  background: var(--bg); border: 1px solid var(--line); border-radius: 8px;
+  color: var(--txt); padding: 10px 12px; font-size: 15px; font-family: var(--sans); width: 100%;
+  transition: border-color .15s;
+}
+.db-grid input:focus { outline: none; border-color: var(--accent); }
+.db-grid i { font-style: normal; font-size: 11px; color: var(--muted); margin-top: -2px; }
+
+.db-ref {
+  margin-top: 16px; font-size: 12px; color: var(--muted);
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+}
+.db-ref input {
+  width: 72px; background: var(--bg); border: 1px solid var(--line); border-radius: 6px;
+  color: var(--txt); padding: 5px 8px; font-size: 13px; font-family: var(--sans); text-align: center;
+}
+.db-ref input:focus { outline: none; border-color: var(--accent); }
+
+@media (max-width: 640px) {
+  .tb-launcher { padding: 16px; }
+  .tb-win .body { padding: 20px 16px 28px; }
+  .tb-dock { margin: 10px 12px 12px; }
+}

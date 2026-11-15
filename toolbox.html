@@ -4,9 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>工具箱 - 尼克松赞干布的个人网站</title>
-  <meta name="description" content="NickWang 的实用小工具合集">
+  <meta name="description" content="NickWang 的实用小工具合集：dB 换算等音频系统工具">
   <script>try{if(localStorage.getItem('nickwang-darkroom')==='1')document.documentElement.classList.add('darkroom')}catch(e){}</script>
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/toolbox.css">
 </head>
 <body>
   <header class="site-header">
@@ -38,21 +39,19 @@
     </div>
   </header>
 
-  <main class="container">
-    <h1>工具箱 · TOOLBOX</h1>
-    <p class="muted">正在整理中——这里将集成电阻色环、dB 换算、BPM↔延迟等实用小工具。敬请期待。</p>
-    <p class="empty" style="margin-top:40px;">工具箱尚未开发，此处为占位页面。</p>
-  </main>
-
-  <footer class="site-footer">
-    <div class="container">
-      <span>© <span id="y"></span> NICKWANG</span>
-      <span>个人网站 · 记录生活 · GITHUB PAGES</span>
+  <div class="toolbox">
+    <div class="tb-stage" id="tbStage">
+      <div class="tb-launcher">
+        <div class="tb-tip">选择工具打开 —— 窗口铺满本区域 · 最小化回到这里 · 点「×」才关闭</div>
+        <div class="tb-grid" id="tbGrid"></div>
+      </div>
     </div>
-  </footer>
+    <div class="tb-dock" id="tbDock"></div>
+  </div>
 
   <script src="js/core.js"></script>
   <script src="js/site.js"></script>
+  <script src="js/toolbox.js"></script>
   <script src="js/darkroom.js"></script>
 </body>
 </html>
