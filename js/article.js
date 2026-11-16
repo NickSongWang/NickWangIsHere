@@ -159,6 +159,17 @@
       document.title = title + ' - 尼克松赞干布的个人网站';
       document.getElementById('post-title').textContent = title;
     }
+
+    // ---- Open Graph 动态更新（微信/社交分享卡片） ----
+    var setOg = function (p, v) {
+      var el = document.querySelector('meta[property="' + p + '"]');
+      if (el && v) el.setAttribute('content', v);
+    };
+    if (title) setOg('og:title', title);
+    setOg('og:url', location.href);
+    var ogDesc = meta.summary || meta.description || '';
+    if (ogDesc) setOg('og:description', ogDesc);
+    if (meta.cover) setOg('og:image', rawBase + NW.encodePath(base + meta.cover));
     var metaLine = [];
     if (meta.date) metaLine.push(meta.date);
     if (meta.tags) metaLine.push('标签：' + meta.tags);

@@ -25,8 +25,40 @@ window.NW = (function () {
     return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
+  /* ---- 预生成索引：优先读 index.json，减少 API 请求 ----
+   * index.json 由 gen_index.py 在推送前生成，包含 articles/cases/projects
+   * 的完整内容与 photos 清单。加载失败（未生成 / 404）时回退到实时 API。 */
+  var indexCache = null;
+  function loadIndex() {
+    if (indexCache) return Promise.resolve(indexCache);
+    var url = isLocal ? 'index.json' + cacheBust() : rawBase + 'index.json' + cacheBust();
+    return fetch(url)
+      .then(function (r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
+      })
+      .then(function (d) { indexCache = d; return d; });
+  }
+
   /** GitHub Contents API（线上）/ 本地预览服务 API（localhost）：列出 dir 下全部条目 */
   function fetchContents(dir) {
+    // photos 目录优先走索引（避免 API 限流）
+    if (dir === 'photos') {
+      return loadIndex()
+        .then(function (index) {
+          if (index && index.photos) {
+            return index.photos.map(function (p) {
+              return { type: 'file', name: p.name, path: p.path, size: p.size };
+            });
+          }
+          throw new Error('索引缺少 photos');
+        })
+        .catch(function () { return fetchContentsLive(dir); });
+    }
+    return fetchContentsLive(dir);
+  }
+
+  function fetchContentsLive(dir) {
     var url = isLocal
       ? '/__api/contents/' + encodePath(dir) + cacheBust()
       : 'https://api.github.com/repos/' + REPO + '/contents/' + dir + cacheBust();
@@ -75,14 +107,25 @@ window.NW = (function () {
    * 返回 Promise<[{ path, title, date, tags, summary, cover }]>，按日期倒序。
    */
   function collectPosts(dir) {
+    return loadIndex()
+      .then(function (index) {
+        if (index && index[dir] && index[dir].length) return index[dir];
+        throw new Error('索引缺少 ' + dir);
+      })
+      .catch(function () {
+        return collectPostsLive(dir);
+      });
+  }
+
+  function collectPostsLive(dir) {
     function isMd(i) { return i.type === 'file' && /\.md$/i.test(i.name) && i.name.charAt(0) !== '_'; }
-    return fetchContents(dir)
+    return fetchContentsLive(dir)
       .then(function (items) {
         var mdFiles = (items || []).filter(isMd);
         var folders = (items || []).filter(function (i) { return i.type === 'dir' && i.name.charAt(0) !== '_'; });
         // 每个文件夹里找第一个 md（约定一夹一篇）
         return Promise.all(folders.map(function (f) {
-          return fetchContents(f.path)
+          return fetchContentsLive(f.path)
             .then(function (inner) {
               var md = (inner || []).filter(isMd)[0];
               return md || null;
