@@ -10,9 +10,29 @@
   --muted: #8f8a80;
   --accent: #d4a24e;
   --ink: #e8c47a;
+  --perf-hole: #1a1512;
   --serif: Georgia, "Songti SC", "SimSun", serif;
   --hand: "Kaiti SC", "KaiTi", "STKaiti", serif;
   --sans: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+}
+
+/* ---------- 浅色主题（明室）：暖白相纸配色 ---------- */
+html.light {
+  --bg: #f5f1e8;
+  --panel: #fffdf7;
+  --line: #e2dac6;
+  --txt: #2b2620;
+  --muted: #6f675a;
+  --accent: #a8782a;
+  --ink: #8a6d3b;
+  --perf-hole: #f4eddf;
+}
+html.light .site-header { background: rgba(245,241,232,.94); }
+html.light .hero {
+  background: linear-gradient(160deg,#f7f2e6 0%,#efe7d6 55%,#f2ecdd 100%);
+}
+html.light .hero::before {
+  background: radial-gradient(ellipse 62% 46% at 62% 34%, rgba(168,120,42,.22), transparent 65%);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -118,32 +138,40 @@ nav a:hover, nav a.active { color: var(--accent); }
 .sec-h h2 .doodle-line { position: absolute; left: 0; bottom: -6px; height: 12px; width: 120px; }
 .sec-h span { font-size: 12px; color: var(--muted); letter-spacing: 2px; }
 
-/* ---------- 胶片条（首页画廊精选） ---------- */
+/* ---------- 胶片条（首页画廊精选 · 仿真 135 胶片） ---------- */
 .film-sec { padding: 30px 0 80px; }
-.film { background: #0a0a0a; border: 1px solid var(--line); padding: 14px 10px; position: relative; }
-.film .stamp { position: absolute; top: -16px; right: 18px; transform: rotate(8deg); z-index: 2; }
+.film { padding: 0 14px; }
+.film-body { display: flex; align-items: center; }
+.film-strip-wrap { flex: 1; min-width: 0; position: relative; }
+.film .stamp { position: absolute; top: -16px; right: 14px; transform: rotate(8deg); z-index: 2; }
 .film .stamp .doodle-note { display: block; text-align: center; margin-top: -2px; }
-.sprockets { display: flex; justify-content: space-between; margin: 0 4px 12px; }
-.sprockets i { width: 16px; height: 10px; background: var(--bg); border-radius: 2px; }
-.frames { display: flex; gap: 12px; overflow-x: auto; scroll-behavior: smooth; padding-bottom: 6px; }
-.frames::-webkit-scrollbar { height: 6px; }
-.frames::-webkit-scrollbar-track { background: #0a0a0a; border-radius: 999px; }
-.frames::-webkit-scrollbar-thumb { background: #3a342a; border-radius: 999px; }
-.frames::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+.film-strip {
+  background: linear-gradient(180deg,#231e19 0%,#161311 12%,#191512 50%,#151210 88%,#241f1a 100%);
+  border: 1px solid #2c2c2c; border-radius: 5px; padding: 0;
+  overflow-x: auto; height: 175px; scrollbar-width: none;
+}
+.film-strip::-webkit-scrollbar { display: none; }
+.strip-content { display: flex; flex-direction: column; height: 173px; width: max-content; min-height: 0; }
+.band { height: 27.5px; flex: none; position: relative; }
+.perf-row { display: flex; gap: 13.31px; position: absolute; left: 5px; right: 0; bottom: 2px; }
+.perf-row.bottom { top: 2px; bottom: auto; }
+.perf-row i { width: 10.44px; height: 13.68px; border-radius: 3px; background: var(--perf-hole, #1a1512); flex: none; box-shadow: inset 0 2px 3px rgba(40,30,18,.4); }
+.edge { position: absolute; left: 6px; top: 2px; font-family: "Courier New", monospace; font-weight: 700; font-size: 11px; color: #e09a3e; letter-spacing: 1px; white-space: nowrap; }
+.edge-num-row { position: absolute; left: 0; right: 0; top: 0; bottom: 0; pointer-events: none; }
+.edge-num { position: absolute; top: 50%; transform: translateY(-50%); text-align: center; font-family: "Courier New", monospace; font-weight: 700; font-size: 11px; color: #e09a3e; }
+.frames { flex: 1; display: flex; gap: 10px; align-items: center; min-height: 0; }
 .frame {
-  flex: 0 0 auto; width: 200px; aspect-ratio: 3/4; position: relative; border: 1px solid #000;
-  background-color: #17140f; background-size: cover; background-position: center;
+  width: 174px; height: 116px; position: relative; border: 1px solid #000; flex: none;
+  background-color: #1b1b1b; background-size: cover; background-position: center; border-radius: 2px; overflow: hidden;
 }
-.frame .no { position: absolute; top: 6px; left: 8px; font-size: 10px; color: var(--accent); opacity: .85; letter-spacing: 2px; }
-.frame .cap {
-  position: absolute; inset: auto 0 0; padding: 22px 10px 8px; font-size: 12px; color: #cfc9bd;
-  background: linear-gradient(transparent, rgba(0,0,0,.72)); opacity: 0; transition: .3s;
-}
-.frame:hover .cap { opacity: 1; }
+.frame img { display: block; position: absolute; left: 50%; top: 50%; }
 .f1 { background-image: linear-gradient(160deg,#5c5346,#2e2a22 65%,#17140f); }
 .f2 { background-image: linear-gradient(200deg,#39434f,#1f2730 60%,#10141a); }
 .f3 { background-image: linear-gradient(140deg,#6e5136,#3a2c1c 60%,#1c150d); }
 .f4 { background-image: linear-gradient(170deg,#2f3d33,#1a241d 60%,#0e120e); }
+.canister { flex: none; width: 140px; height: 210px; margin-left: 0; position: relative; box-shadow: 0 8px 18px rgba(0,0,0,.35); }
+.canister .svg { width: 100%; height: 100%; display: block; }
+.canister::before { content: ""; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 10px; height: 175px; background: #080808; border-radius: 2px; }
 
 /* ---------- 手记列表（文章流） ---------- */
 .exposure { padding: 60px 0 80px; }
@@ -309,6 +337,21 @@ html.darkroom .darkroom-btn .bulb-off { fill: rgba(255,84,56,.30); }
 html.darkroom .darkroom-btn .bulb-rays { opacity: 1; }
 html.darkroom .darkroom-btn .t-on { display: inline; }
 html.darkroom .darkroom-btn .t-off { display: none; }
+
+/* ---------- 明暗主题切换按钮 ---------- */
+.theme-btn {
+  display: inline-flex; align-items: center; gap: 7px; flex: none;
+  background: none; border: 1px solid var(--line); border-radius: 999px;
+  padding: 5px 14px; cursor: pointer;
+  font-family: var(--hand); font-size: 13px; letter-spacing: 2px; color: var(--muted);
+  transition: color .3s, border-color .3s;
+}
+.theme-btn:hover { border-color: var(--accent); color: var(--ink); }
+.theme-btn svg { width: 16px; height: 16px; overflow: visible; }
+.theme-btn .sun, .theme-btn .sun-rays { fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; }
+.theme-btn .t-dark { display: none; }
+html.light .theme-btn .t-light { display: none; }
+html.light .theme-btn .t-dark { display: inline; }
 
 /* 红色安全灯光罩：multiply 混合让照片/SVG/文字全部染红，像真实暗房红灯 */
 html.darkroom body::before {

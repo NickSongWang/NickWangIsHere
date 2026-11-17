@@ -13,6 +13,7 @@
   <meta property="og:image" content="https://nicksongwang.github.io/NickWangIsHere/img/avatar.webp">
   <meta name="twitter:card" content="summary">
   <script>try{if(localStorage.getItem('nickwang-darkroom')==='1')document.documentElement.classList.add('darkroom')}catch(e){}</script>
+  <script>try{if(localStorage.getItem('nickwang-light')==='1')document.documentElement.classList.add('light')}catch(e){}</script>
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/toolbox.css">
 </head>
@@ -40,6 +41,22 @@
           </g>
         </svg>
         <span class="t-off">暗房</span><span class="t-on">开灯</span>
+      </button>
+      <button class="theme-btn" id="themeBtn" type="button" title="切换明暗主题">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle class="sun" cx="12" cy="12" r="4.4"/>
+          <g class="sun-rays">
+            <line x1="12" y1="2.4" x2="12" y2="5"/>
+            <line x1="12" y1="19" x2="12" y2="21.6"/>
+            <line x1="2.4" y1="12" x2="5" y2="12"/>
+            <line x1="19" y1="12" x2="21.6" y2="12"/>
+            <line x1="5.2" y1="5.2" x2="7" y2="7"/>
+            <line x1="17" y1="17" x2="18.8" y2="18.8"/>
+            <line x1="5.2" y1="18.8" x2="7" y2="17"/>
+            <line x1="17" y1="7" x2="18.8" y2="5.2"/>
+          </g>
+        </svg>
+        <span class="t-light">明室</span><span class="t-dark">暗室</span>
       </button>
       <button class="menu-btn" id="menuBtn">☰</button>
       </div>

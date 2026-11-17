@@ -10,6 +10,15 @@
   var y = document.getElementById('y');
   if (y) y.textContent = new Date().getFullYear();
 
+  // 明暗主题切换（浅色/深色，localStorage 持久化）
+  var themeBtn = document.getElementById('themeBtn');
+  if (themeBtn) {
+    themeBtn.addEventListener('click', function () {
+      var on = document.documentElement.classList.toggle('light');
+      try { localStorage.setItem('nickwang-light', on ? '1' : '0'); } catch (e) { /* ignore */ }
+    });
+  }
+
   // 移动端菜单：开合 + 点击链接后自动收起
   var nav = document.getElementById('nav');
   var menuBtn = document.getElementById('menuBtn');

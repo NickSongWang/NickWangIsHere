@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>浅色模式演示 · 尼克松赞干布的个人网站</title>
+<style>
+  :root{
+    --bg:#f5f1e8;         /* 米白相纸 */
+    --bg-deep:#ece6d8;    /* 稍深米色 */
+    --panel:#fffdf8;      /* 面板白 */
+    --panel2:#f4efe3;     /* 次级面板 */
+    --line:#e2dac6;       /* 边框暖灰 */
+    --line-strong:#cdc2a8;/* 强调边框 */
+    --txt:#2b2620;        /* 主文字深棕 */
+    --muted:#6f675a;      /* 次要文字 */
+    --accent:#a8782a;     /* 金色（加深保对比） */
+    --ink:#8a6d3b;        /* 手写金棕 */
+    --teal:#1d7a5c;       /* 状态青 */
+    --danger:#b04132;     /* 关闭红 */
+    --serif:Georgia,"Songti SC","SimSun",serif;
+    --hand:"Kaiti SC","KaiTi","STKaiti",serif;
+    --sans:"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:var(--sans);background:var(--bg);color:var(--txt);line-height:1.8;-webkit-font-smoothing:antialiased}
+
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+
+  /* ===== 分区标注 ===== */
+  .sec-label{font-family:var(--serif);font-size:12px;letter-spacing:3px;color:var(--accent);
+    margin:52px 0 16px;display:flex;align-items:center;gap:12px}
+  .sec-label::after{content:"";flex:1;height:1px;background:var(--line)}
+
+  /* ===== 导航栏 ===== */
+  .site-header{position:sticky;top:0;z-index:10;background:rgba(245,241,232,.94);
+    backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:62px}
+  .logo{font-family:var(--serif);letter-spacing:5px;font-size:15px;font-weight:700;color:var(--txt);text-decoration:none}
+  .logo b{color:var(--accent);font-weight:400}
+  nav a{font-size:13px;color:var(--muted);margin-left:26px;letter-spacing:2px;text-decoration:none;transition:.2s}
+  nav a:hover,nav a.active{color:var(--accent)}
+  .nav-right{display:flex;align-items:center}
+  .darkroom-btn{display:inline-flex;align-items:center;gap:7px;background:none;
+    border:1px solid var(--line-strong);border-radius:999px;padding:5px 14px;cursor:pointer;
+    color:var(--muted);font-size:12px;letter-spacing:1px}
+  .darkroom-btn:hover{border-color:var(--accent);color:var(--accent)}
+  .darkroom-btn svg{width:16px;height:16px}
+  .darkroom-btn .bulb-off{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .darkroom-btn .bulb-rays line{stroke:currentColor;stroke-width:1.3;stroke-linecap:round}
+  .menu-btn{display:none;background:none;border:1px solid var(--line-strong);color:var(--txt);padding:4px 12px;cursor:pointer;font-size:14px;border-radius:6px}
+
+  /* ===== Hero ===== */
+  .hero{position:relative;padding:72px 0 56px;border-bottom:1px solid var(--line);
+    background:linear-gradient(160deg,#f7f2e6 0%,#efe7d6 55%,#f2ecdd 100%)}
+  .hero .kicker{font-family:var(--serif);font-size:12px;letter-spacing:6px;color:var(--accent)}
+  .hero h1{font-family:var(--serif);font-size:clamp(34px,6vw,64px);letter-spacing:8px;line-height:1.15;margin:14px 0 8px;font-weight:400}
+  .hero .zh{font-size:15px;letter-spacing:10px;color:var(--muted)}
+  .hero .exif{margin-top:24px;font-size:12px;color:var(--muted);letter-spacing:1px;display:flex;gap:20px;flex-wrap:wrap}
+  .hero .exif i{color:var(--accent);font-style:normal}
+
+  /* ===== 介绍区 ===== */
+  .intro{display:flex;gap:44px;align-items:flex-start;padding:44px 0 20px}
+  .frame-box{width:170px;border:1px solid var(--line-strong);padding:9px;background:var(--panel);border-radius:4px}
+  .frame-box .img{aspect-ratio:3/4;background:linear-gradient(155deg,#f0e8d8,#e2d7c0 70%);overflow:hidden;border-radius:2px}
+  .frame-box .img img{width:100%;height:100%;object-fit:cover;display:block}
+  .intro .txt{max-width:620px}
+  .intro .txt h2{font-family:var(--serif);font-weight:400;font-size:24px;letter-spacing:2px;margin-bottom:16px}
+  .intro .txt h2 em{font-style:normal;color:var(--accent)}
+  .intro .txt p{color:var(--muted);font-size:15px;margin-bottom:10px}
+
+  /* ===== 胶片匣（真实胶片：整条连续齿孔，随照片线性滚动） ===== */
+  .film{position:relative;padding:0 14px}
+  .film-body{display:flex;align-items:center}
+  .film-strip-wrap{flex:1;min-width:0;position:relative}
+  .film-strip{background:linear-gradient(180deg,#231e19 0%,#161311 12%,#191512 50%,#151210 88%,#241f1a 100%);
+    border:1px solid #2c2c2c;border-radius:5px;padding:0;
+    overflow-x:auto;height:175px;scrollbar-width:none}
+  .film-strip::-webkit-scrollbar{display:none}
+  .strip-content{display:flex;flex-direction:column;height:173px;width:max-content;min-height:0}
+  .band{height:27.5px;flex:none;position:relative}
+  .perf-row{display:flex;gap:13.31px;position:absolute;left:5px;right:0;bottom:2px}
+  .perf-row.bottom{top:2px;bottom:auto}
+  .perf-row i{width:10.44px;height:13.68px;border-radius:3px;background:#f4eddf;flex:none;
+    box-shadow:inset 0 2px 3px rgba(40,30,18,.4)}
+  .edge{position:absolute;left:6px;top:2px;font-family:"Courier New",monospace;font-weight:700;
+    font-size:11px;color:#e09a3e;letter-spacing:1px;white-space:nowrap}
+  .edge.bottom{top:auto;bottom:2px}
+  .frames{flex:1;display:flex;gap:10px;align-items:center;min-height:0}
+  .frame{width:174px;height:116px;position:relative;border:1px solid #000;flex:none;
+    background-color:#1b1b1b;border-radius:2px;overflow:hidden}
+  .frame img{display:block;position:absolute;left:50%;top:50%}
+  .edge-num-row{position:absolute;left:0;right:0;top:0;bottom:0;pointer-events:none}
+  .edge-num{position:absolute;top:50%;transform:translateY(-50%);text-align:center;
+    font-family:"Courier New",monospace;font-weight:700;font-size:11px;color:#e09a3e}
+
+  /* 胶片暗盒（右侧固定，真实比例 2:3，胶片从中抽出） */
+  .canister{flex:none;width:140px;height:210px;margin-left:0;position:relative;
+    box-shadow:0 8px 18px rgba(0,0,0,.35)}
+  .canister .svg{width:100%;height:100%;display:block}
+  .canister::before{
+    content:"";position:absolute;left:0;top:50%;transform:translateY(-50%);
+    width:10px;height:175px;background:#080808;border-radius:2px;
+  }
+
+  /* ===== 热力图 ===== */
+  .heatmap{display:inline-block;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px}
+  .hm-grid{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,11px);gap:3px}
+  .hm-grid i{width:11px;height:11px;border-radius:2px;background:#e9e4d8}
+  .hm-grid i.l1{background:#c8dfc0}.hm-grid i.l2{background:#8ec47f}
+  .hm-grid i.l3{background:#4e9a52}.hm-grid i.l4{background:#1d7a2c}
+
+  /* ===== 手绘线条元素（胶片手写批注） ===== */
+  .doodle-line{display:block;height:16px;margin-top:6px;overflow:visible}
+  .doodle-note{font-family:var(--hand);color:var(--ink);font-size:13px;letter-spacing:1px;transform:rotate(-4deg);white-space:nowrap}
+  .doodle-star{overflow:visible}
+  .frame-wrap{position:relative;flex:none}
+  .doodle-arrow{position:absolute;top:-30px;right:-72px;width:108px;overflow:visible}
+  .doodle-arrow .lab{font-family:var(--hand);fill:var(--ink);font-size:13px;letter-spacing:1px}
+  .cir{position:relative}
+  .cir svg{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:110%;height:150%;pointer-events:none;overflow:visible}
+  .stamp{position:absolute;top:-14px;right:16px;transform:rotate(8deg);z-index:2;text-align:center}
+  .stamp .doodle-note{display:block;text-align:center;margin-top:-2px;color:#e8c47a}
+
+  /* ===== 卡片通用 ===== */
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 22px}
+  .card h3{font-size:16px;font-weight:500;margin-bottom:6px}
+  .card .meta{font-size:12px;color:var(--muted);margin-bottom:8px}
+  .card p{font-size:14px;color:var(--muted);line-height:1.7}
+  .tag{display:inline-block;font-size:11px;color:var(--accent);border:1px solid var(--line-strong);
+    border-radius:999px;padding:1px 10px;margin:0 6px 4px 0;letter-spacing:1px}
+
+  /* 手记列表 */
+  .essay{display:flex;gap:20px;align-items:center;padding:20px 0;border-bottom:1px solid var(--line)}
+  .essay .no{font-family:var(--serif);font-size:13px;color:var(--accent);letter-spacing:2px;flex:none;width:44px}
+  .essay .cover{width:110px;aspect-ratio:4/3;border-radius:6px;background:#e8e1d2;background-size:cover;background-position:center;border:1px solid var(--line);flex:none}
+  .essay .body h3{font-size:15px;font-weight:500}
+  .essay .body p{font-size:13px;color:var(--muted)}
+
+  /* 案例卡片 */
+  .cs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+  .cs-card .cs-top{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted);margin-bottom:8px}
+  .cs-badge{font-size:11px;padding:1px 9px;border-radius:4px;letter-spacing:1px}
+  .cs-b-problem{background:#f6e2dd;color:var(--danger)}
+  .cs-b-tip{background:#e2f0e8;color:var(--teal)}
+  .cs-sec{border-top:1px dashed var(--line);padding-top:10px;margin-top:10px}
+  .cs-k{display:block;font-size:13px;color:var(--accent);margin-bottom:4px}
+
+  /* 项目卡片 */
+  .pj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+  .pj-card{overflow:hidden;border-radius:12px;border:1px solid var(--line);background:var(--panel);transition:.2s}
+  .pj-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+  .pj-cov{aspect-ratio:2/1;position:relative;background:#efe6d4;display:flex;align-items:center;justify-content:center}
+  .pj-lv{position:absolute;top:10px;left:10px;font-size:11px;color:var(--accent)}
+  .pj-st{position:absolute;top:10px;right:10px;font-size:11px;color:var(--teal);border:1px solid var(--teal);border-radius:4px;padding:0 6px}
+  .pj-card .pj-info{padding:14px 16px}
+  .pj-card .pj-info h3{font-size:15px;font-weight:500}
+  .pj-card .pj-info p{font-size:12px;color:var(--muted);margin:4px 0 8px}
+  .pj-chips i{font-style:normal;font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:1px 7px;margin-right:6px}
+
+  /* 工具箱入口 + 窗口 */
+  .tb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+  .tb-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 16px;cursor:pointer;transition:.2s}
+  .tb-card:hover{border-color:var(--accent)}
+  .tb-card .ic{font-size:22px;color:var(--accent);font-weight:500}
+  .tb-card h3{font-size:15px;font-weight:500;margin:8px 0 4px}
+  .tb-card p{font-size:12px;color:var(--muted)}
+  .tb-win{border:1px solid var(--line-strong);border-radius:12px;overflow:hidden;background:var(--panel)}
+  .tb-win .bar{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:var(--panel2);border-bottom:1px solid var(--line)}
+  .tb-win .bar .ttl{font-size:13px;font-weight:500;display:flex;align-items:center;gap:8px}
+  .tb-win .bar .dot{width:8px;height:8px;border-radius:50%;background:var(--accent)}
+  .tb-win .bar .btns{display:flex;gap:6px}
+  .tb-win .bar button{width:26px;height:26px;border-radius:6px;border:1px solid var(--line-strong);background:none;color:var(--muted);cursor:pointer;font-size:14px}
+  .tb-win .bar button:hover{color:var(--accent);border-color:var(--accent)}
+  .tb-win .body{padding:20px}
+  .db-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+  .db-grid label{display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted)}
+  .db-grid input{background:var(--bg);border:1px solid var(--line-strong);border-radius:8px;color:var(--txt);padding:9px 12px;font-size:14px;font-family:var(--sans)}
+  .db-grid input:focus{outline:none;border-color:var(--accent)}
+  .db-grid i{font-style:normal;font-size:11px;color:var(--muted)}
+
+  /* 控件 */
+  .ctl-row{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+  .seg{display:inline-flex;border:1px solid var(--line-strong);border-radius:8px;overflow:hidden}
+  .seg button{background:var(--panel);border:none;color:var(--muted);padding:7px 16px;font-size:13px;cursor:pointer;border-right:1px solid var(--line)}
+  .seg button:last-child{border-right:none}
+  .seg button.act{background:var(--accent);color:#fff}
+  .search{background:var(--panel);border:1px solid var(--line-strong);border-radius:8px;padding:8px 14px;font-size:13px;color:var(--txt);font-family:var(--sans)}
+  .chip{font-size:12px;color:var(--accent);border:1px solid var(--line-strong);border-radius:999px;padding:3px 12px;cursor:pointer;background:var(--panel)}
+  .chip.act{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .btn-gold{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:9px 20px;font-size:13px;cursor:pointer;letter-spacing:1px}
+  .btn-line{background:none;border:1px solid var(--line-strong);color:var(--muted);border-radius:8px;padding:9px 20px;font-size:13px;cursor:pointer}
+
+  /* 页脚 */
+  .site-footer{border-top:1px solid var(--line);margin-top:48px;padding:24px 0 32px;color:var(--muted);font-size:13px;
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+
+  @media (max-width:720px){
+    nav{display:none}
+    nav.open{display:flex;flex-direction:column;position:absolute;top:62px;left:0;right:0;background:var(--bg);border-bottom:1px solid var(--line);padding:10px 24px}
+    nav.open a{margin:8px 0}
+    .menu-btn{display:block}
+    .intro{flex-direction:column;gap:24px}
+    .essay .cover{width:76px}
+  }
+</style>
+</head>
+<body>
+
+  <!-- 01 导航 -->
+  <div class="wrap"><div class="sec-label">01 · 导航 NAVIGATION</div></div>
+  <header class="site-header">
+    <div class="wrap nav">
+      <a class="logo">NICK<b>WANG</b></a>
+      <div class="nav-right">
+        <nav>
+          <a class="active">首页</a>
+          <a>知识文档</a>
+          <a>案例经验</a>
+          <a>开源项目</a>
+          <a>工具箱</a>
+        </nav>
+        <button class="darkroom-btn">
+          <svg viewBox="0 0 24 24"><path class="bulb-off" d="M12 3.2c-3.6 0-6.2 2.7-6.2 5.7 0 2 1.1 3.2 2.1 4.3.6.7 1.2 1.4 1.4 2.4h5.4c.2-1 .8-1.7 1.4-2.4 1-1.1 2.1-2.3 2.1-4.3 0-3-2.6-5.7-6.2-5.7z"/><path class="bulb-off" d="M9.8 18.4h4.4M10.5 20.6h3"/><g class="bulb-rays"><line x1="2.2" y1="3.6" x2="4.4" y2="5.4"/><line x1="21.8" y1="3.6" x2="19.6" y2="5.4"/><line x1="1.2" y1="9.2" x2="3.6" y2="9.2"/><line x1="22.8" y1="9.2" x2="20.4" y2="9.2"/></g></svg>
+          暗房
+        </button>
+        <button class="menu-btn">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 02 Hero -->
+  <div class="wrap"><div class="sec-label">02 · 首页首屏 HERO</div></div>
+  <div class="hero">
+    <div class="wrap">
+      <div class="kicker">CIRCUITS · PHOTOGRAPHS · NOTES</div>
+      <h1>光影，与电流</h1>
+      <svg class="doodle-line" viewBox="0 0 360 16">
+        <path d="M6 10 C 40 4, 72 13, 116 7 S 196 5, 256 9 S 316 7, 352 8" fill="none" stroke="#a8782a" stroke-width="2.6" stroke-linecap="round"/>
+        <path d="M12 13 C 56 9, 130 15, 220 11 S 310 10, 346 11" fill="none" stroke="#8a6d3b" stroke-width="1.2" opacity=".55" stroke-linecap="round"/>
+      </svg>
+      <div class="zh">欢迎来到尼克松赞干布的表层世界</div>
+      <div class="exif"><span><i>ENGINEER</i> 不想上班的INFP </span><span><i>LENS</i> 海鸥 DF-2 </span><span><i>EST.</i> 2026</span></div>
+    </div>
+  </div>
+
+  <!-- 03 介绍 -->
+  <div class="wrap">
+    <div class="sec-label">03 · 自我介绍 INTRO</div>
+    <div class="intro">
+      <div class="frame-wrap">
+        <div class="frame-box"><div class="img"><img src="img/avatar.webp" alt="头像"></div></div>
+        <svg class="doodle-arrow" viewBox="0 0 120 90">
+          <path d="M112 10 C 66 16, 32 34, 14 56" fill="none" stroke="#8a6d3b" stroke-width="2.4" stroke-linecap="round"/>
+          <path d="M18 44 L 12 58 L 28 52" fill="none" stroke="#8a6d3b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <text class="lab" x="104" y="6">这是我</text>
+        </svg>
+      </div>
+      <div class="txt">
+        <h2>不务正业的<em>废物尼克<span class="cir"><svg viewBox="0 0 150 42" preserveAspectRatio="none"><path d="M5 22 C 14 7, 44 3, 76 5 C 108 7, 138 14, 143 22 C 140 32, 94 38, 62 35 C 30 32, 3 31, 5 22 Z" fill="none" stroke="#a8782a" stroke-width="2" stroke-linecap="round"/></svg></span></em></h2>
+        <p>这里不知道改怎么介绍自己了，先随便编点字数占一下位置吧~</p>
+        <p>从前有座山，山里有座庙.....</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 04 胶片匣 -->
+  <div class="wrap">
+    <div class="sec-label">04 · 胶片匣 FILMSTRIP</div>
+    <div class="film">
+      <div class="film-body">
+        <div class="film-strip-wrap">
+          <div class="stamp">
+            <svg class="doodle-star" width="40" height="40" viewBox="0 0 60 60">
+              <path d="M30 6 L37 24 L56 25 L41 37 L46 56 L30 45 L14 56 L19 37 L4 25 L23 24 Z" fill="none" stroke="#e8c47a" stroke-width="2.4" stroke-linejoin="round"/>
+            </svg>
+            <span class="doodle-note">好片</span>
+          </div>
+          <div class="film-strip">
+            <div class="strip-content">
+              <div class="band">
+                <div class="edge">NICKWANG FILM · 135 · C-41</div>
+                <div class="perf-row"></div>
+              </div>
+              <div class="frames">
+                <div class="frame"><img src="photos/000000350001.webp" alt="照片"></div>
+                <div class="frame"><img src="photos/000017870015.webp" alt="照片"></div>
+                <div class="frame"><img src="photos/000017880016.webp" alt="照片"></div>
+                <div class="frame"><img src="photos/000017880039.webp" alt="照片"></div>
+                <div class="frame"><img src="photos/未命名会话03268.webp" alt="照片"></div>
+              </div>
+              <div class="band">
+                <div class="perf-row bottom"></div>
+                <div class="edge-num-row"></div>
+              </div>
+            </div>
+          </div>
+      </div>
+      <div class="canister" aria-hidden="true">
+        <svg class="svg" viewBox="0 0 190 285" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="5294 胶片暗盒">
+          <defs>
+            <clipPath id="cbody"><rect x="6" y="22" width="178" height="244" rx="12"/></clipPath>
+          </defs>
+          <rect x="63" y="0" width="64" height="15" rx="7" fill="#1c1c1c"/>
+          <rect x="3" y="9" width="184" height="20" rx="10" fill="#161616"/>
+          <rect x="3" y="263" width="184" height="22" rx="11" fill="#161616"/>
+          <g clip-path="url(#cbody)">
+            <rect x="6" y="22" width="178" height="244" fill="#16294f"/>
+            <rect x="6" y="22" width="178" height="4" fill="#c6cad0"/>
+            <text x="20" y="54" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="bold" fill="#f0c33c">ISO100</text>
+            <text x="95" y="106" font-family="Arial,Helvetica,sans-serif" font-size="52" font-weight="bold" fill="#ffffff" text-anchor="middle">5294</text>
+            <rect x="6" y="130" width="178" height="2" fill="#1d3258"/>
+            <rect x="6" y="133" width="178" height="2" fill="#3c527f"/>
+            <rect x="6" y="136" width="178" height="2" fill="#66799f"/>
+            <rect x="6" y="139" width="178" height="2" fill="#9aa8c0"/>
+            <rect x="6" y="142" width="178" height="2" fill="#cdd3dc"/>
+            <rect x="6" y="146" width="178" height="120" fill="#f4f3ee"/>
+            <text x="20" y="172" font-family="Arial,Helvetica,sans-serif" font-size="9" fill="#3a3a3a" letter-spacing="1">BY CRYSTAL FILMS</text>
+            <text x="20" y="200" font-family="Arial,Helvetica,sans-serif" font-size="19" font-weight="bold" fill="#e07b39">CRYSTAL 100D</text>
+            <text x="20" y="223" font-family="Arial,Helvetica,sans-serif" font-size="10" font-style="italic" fill="#2b4a7a">Color Reversal Film</text>
+          </g>
+        </svg>
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 05 热力图 -->
+  <div class="wrap">
+    <div class="sec-label">05 · 曝光热力图 HEATMAP</div>
+    <div class="heatmap">
+      <div class="hm-grid">
+        <i></i><i></i><i class="l1"></i><i></i><i class="l2"></i><i></i><i class="l4"></i>
+        <i></i><i class="l3"></i><i></i><i></i><i></i><i class="l1"></i><i></i>
+        <i class="l2"></i><i></i><i></i><i class="l4"></i><i></i><i></i><i class="l1"></i>
+        <i></i><i></i><i class="l1"></i><i></i><i class="l2"></i><i></i><i></i>
+        <i class="l3"></i><i></i><i></i><i></i><i class="l1"></i><i></i><i class="l2"></i>
+        <i></i><i class="l2"></i><i></i><i class="l4"></i><i></i><i></i><i></i>
+        <i></i><i></i><i class="l1"></i><i></i><i></i><i class="l3"></i><i></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- 06 手记列表 -->
+  <div class="wrap">
+    <div class="sec-label">06 · 手记列表 NOTES</div>
+    <div class="essay">
+      <span class="no">N.01</span>
+      <div class="cover" style="background-image:linear-gradient(155deg,#e9dfc8,#d8cbb0)"></div>
+      <div class="body">
+        <h3>回转器（Gyrator）电路与相关知识的学习笔记</h3>
+        <p><span class="tag">电路</span><span class="tag">模拟电路</span><span class="tag">回转器</span></p>
+        <p>模拟电感最常用的一个功能就是用作滤波器…</p>
+      </div>
+    </div>
+    <div class="essay">
+      <span class="no">N.02</span>
+      <div class="cover" style="background-image:linear-gradient(140deg,#d8c8ae,#c4b596)"></div>
+      <div class="body">
+        <h3>示例手记标题（占位）</h3>
+        <p><span class="tag">学习笔记</span></p>
+        <p>这里是摘要文字，展示浅色模式下的文章流样式…</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 07 案例卡片 -->
+  <div class="wrap">
+    <div class="sec-label">07 · 案例卡片 CASE FILES</div>
+    <div class="cs-grid">
+      <div class="card cs-card">
+        <div class="cs-top"><span class="cs-badge cs-b-problem">问题</span><span>2026-11-08</span></div>
+        <h3>上电浪涌导致 MCU 反复复位</h3>
+        <div class="cs-sec"><span class="cs-k">▸ 根因分析</span><p>上电瞬间浪涌电流拉低 VCC，触发欠压复位。</p></div>
+        <div class="cs-sec"><span class="cs-k">▸ 解决方案</span><p>加大去耦电容并串联限流电阻。</p></div>
+      </div>
+      <div class="card cs-card">
+        <div class="cs-top"><span class="cs-badge cs-b-tip">经验</span><span>2026-10-30</span></div>
+        <h3>示波器探头先做补偿校准</h3>
+        <div class="cs-sec"><p>测量前用探头接方波校准口，调补偿电容至波形方正规整，避免测量误差。</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 08 项目卡片 -->
+  <div class="wrap">
+    <div class="sec-label">08 · 项目墙 PROJECTS</div>
+    <div class="pj-grid">
+      <div class="pj-card">
+        <div class="pj-cov"><svg width="120" height="60" viewBox="0 0 300 150"><path d="M20 90 L90 30 L150 120 L210 40 L280 90" fill="none" stroke="#a8782a" stroke-width="2"/><circle cx="150" cy="70" r="26" fill="none" stroke="#8a6d3b" stroke-width="1.5"/><rect x="200" y="20" width="50" height="36" rx="4" fill="none" stroke="#a8782a" stroke-width="1.6"/></svg>
+          <span class="pj-lv">★★ 进阶</span><span class="pj-st">已开源</span></div>
+        <div class="pj-info"><h3>低压差线性电源模块</h3><p>可调 LDO 供电板，适合实验室桌面。</p><div class="pj-chips"><i>模拟</i><i>电源</i></div></div>
+      </div>
+      <div class="pj-card">
+        <div class="pj-cov"><svg width="120" height="60" viewBox="0 0 300 150"><path d="M30 100 L110 40 L190 110 L270 50" fill="none" stroke="#a8782a" stroke-width="2"/><rect x="60" y="60" width="60" height="40" rx="4" fill="none" stroke="#8a6d3b" stroke-width="1.6"/></svg>
+          <span class="pj-lv">★★★ 硬核</span><span class="pj-st">显影中</span></div>
+        <div class="pj-info"><h3>桌面音频 VU 表灯箱</h3><p>复古指针表 + 背光驱动。</p><div class="pj-chips"><i>音频</i><i>驱动</i></div></div>
+      </div>
+      <div class="pj-card">
+        <div class="pj-cov"><svg width="120" height="60" viewBox="0 0 300 150"><path d="M20 70 L90 90 L160 40 L230 110 L280 60" fill="none" stroke="#a8782a" stroke-width="2"/><circle cx="150" cy="80" r="30" fill="none" stroke="#8a6d3b" stroke-width="1.5"/></svg>
+          <span class="pj-lv">★ 入门</span><span class="pj-st">已开源</span></div>
+        <div class="pj-info"><h3>蓝牙调试小助手</h3><p>BLE 串口透传调试工具。</p><div class="pj-chips"><i>无线</i><i>BLE</i></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 09 工具箱 -->
+  <div class="wrap">
+    <div class="sec-label">09 · 工具箱 TOOLBOX</div>
+    <div class="tb-grid">
+      <div class="tb-card"><div class="ic">dB</div><h3>dB 换算</h3><p>dBu · dBV · dBFS · dB SPL</p></div>
+      <div class="tb-card"><div class="ic">Ω</div><h3>电阻色环</h3><p>色环 → 阻值误差</p></div>
+      <div class="tb-card"><div class="ic">BPM</div><h3>BPM 延迟</h3><p>拍速 ↔ 延迟毫秒</p></div>
+      <div class="tb-card"><div class="ic">÷</div><h3>分压电阻</h3><p>Vout = Vin·R2/(R1+R2)</p></div>
+    </div>
+    <div class="tb-win" style="margin-top:16px;max-width:640px">
+      <div class="bar"><span class="ttl"><span class="dot"></span>dB 换算</span><span class="btns"><button>–</button><button>×</button></span></div>
+      <div class="body">
+        <div class="db-grid">
+          <label>电压 RMS<input value="0.7746"><i>V</i></label>
+          <label>dBu<input value="0"><i>dBu</i></label>
+          <label>dBV<input value="-2.218"><i>dBV</i></label>
+          <label>dBFS<input value="-22"><i>dBFS</i></label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10 控件 -->
+  <div class="wrap">
+    <div class="sec-label">10 · 控件 CONTROLS</div>
+    <div class="ctl-row">
+      <div class="seg"><button class="act">全部</button><button>问题</button><button>经验</button></div>
+      <input class="search" placeholder="搜索标题 / 正文 / 器件…">
+      <span class="chip act">#电路</span><span class="chip">#电源</span><span class="chip">#音频</span>
+      <button class="btn-gold">主要按钮</button>
+      <button class="btn-line">次要按钮</button>
+    </div>
+  </div>
+
+  <!-- 页脚 -->
+  <footer class="site-footer">
+    <div class="wrap" style="display:flex;justify-content:space-between;width:100%;flex-wrap:wrap;gap:8px">
+      <span>© 2026 NICKWANG</span>
+      <span>个人网站 · 记录生活 · GITHUB PAGES</span>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      // 胶片条：鼠标滚轮 / 触控板手势转为横向滚动
+      var strip = document.querySelector('.film-strip');
+      if (strip) {
+        strip.addEventListener('wheel', function (e) {
+          var canRight = strip.scrollLeft + strip.clientWidth < strip.scrollWidth - 1;
+          var canLeft = strip.scrollLeft > 0;
+          var dx = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+          if ((dx > 0 && canRight) || (dx < 0 && canLeft)) {
+            e.preventDefault();
+            strip.scrollLeft += dx;
+          }
+        }, { passive: false });
+      }
+      // 图片加载完成后：缩放照片 + 生成齿孔 + 帧号
+      window.addEventListener('load', function () {
+        // 照片缩放：横幅保持比例缩放，竖幅旋转 90° 横过来
+        var imgs = document.querySelectorAll('.frame img');
+        imgs.forEach(function (img) {
+          function fit() {
+            var w = img.naturalWidth, h = img.naturalHeight;
+            if (!w || !h) return;
+            var FW = 174, FH = 116;
+            if (h > w) {
+              var rw = FH * (h / w);
+              img.style.width = FH + 'px';
+              img.style.height = rw + 'px';
+              img.style.marginLeft = -(FH / 2) + 'px';
+              img.style.marginTop = -(rw / 2) + 'px';
+              img.style.transform = 'rotate(90deg)';
+            } else {
+              var s = Math.min(FW / w, FH / h);
+              var dw = w * s, dh = h * s;
+              img.style.width = dw + 'px';
+              img.style.height = dh + 'px';
+              img.style.marginLeft = -(dw / 2) + 'px';
+              img.style.marginTop = -(dh / 2) + 'px';
+              img.style.transform = 'none';
+            }
+          }
+          if (img.complete) fit();
+          else img.addEventListener('load', fit);
+        });
+        var framesEl = document.querySelector('.frames');
+        var rows = document.querySelectorAll('.perf-row');
+        if (framesEl && rows.length) {
+          var pitch = 23.75;
+          var count = Math.ceil((framesEl.scrollWidth + 24) / pitch);
+          rows.forEach(function (row) {
+            for (var i = 0; i < count; i++) {
+              var hole = document.createElement('i');
+              row.appendChild(hole);
+            }
+          });
+        }
+        // 帧号印在下边带，与照片对齐
+        var numRow = document.querySelector('.edge-num-row');
+        var frames = document.querySelectorAll('.frame');
+        if (numRow && frames.length) {
+          var numRect = numRow.getBoundingClientRect();
+          frames.forEach(function (frame, i) {
+            var fr = frame.getBoundingClientRect();
+            var num = document.createElement('span');
+            num.className = 'edge-num';
+            num.textContent = (i + 1) + 'A';
+            num.style.left = (fr.left - numRect.left) + 'px';
+            num.style.width = fr.width + 'px';
+            numRow.appendChild(num);
+          });
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
