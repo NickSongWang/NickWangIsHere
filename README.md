@@ -33,6 +33,7 @@
 ├── cases.html            # 案例经验
 ├── projects.html         # 项目墙
 ├── toolbox.html          # 工具箱
+├── 404.html              # 自定义 404 页（GitHub Pages 自动生效）
 │
 ├── articles/             # ★ 手记 Markdown（一夹一篇或散装 .md）
 │   └── 2026-08-06-gyrator/
