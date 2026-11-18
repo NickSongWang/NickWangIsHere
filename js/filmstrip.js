@@ -1,8 +1,8 @@
 /*
  * filmstrip.js — 首页「胶片匣 · SELECTED FRAMES」
- * 展示 photos/ 下全部照片（按文件名排序），以仿真 135 胶片条呈现：
- * 深棕片基 + 圆角齿孔 + 边字 + 帧号 + 右侧 5294 暗盒。
- * 照片横幅按比例缩放、竖幅旋转 90° 横过来；滚轮转横向滚动。
+ * 仿真 135 胶片条：深棕片基 + 圆角齿孔 + 边字 + 圆弧片头 + N/NA 帧号 + 5294 暗盒。
+ * 照片横幅按比例缩放、竖幅旋转 90°；滚轮转横向滚动；
+ * 初次下滑到胶片匣时播放「胶片从暗盒抽出」入场动画。
  */
 (function () {
   'use strict';
@@ -12,17 +12,20 @@
   var filmStrip = document.getElementById('film-strip');
   var IMG_EXT = /\.(jpe?g|png|gif|webp|bmp|svg|avif)$/i;
   var countEl = document.querySelector('.film-sec .sec-h span');
+  var animating = false; // 抽出动画期间锁定滚轮交互
 
   function placeholder() {
-    return '<div class="frame f1"><span class="cap">待冲印</span></div>' +
+    return '<div class="leader"></div>' +
+           '<div class="frame f1"><span class="cap">待冲印</span></div>' +
            '<div class="frame f2"><span class="cap">待冲印</span></div>' +
            '<div class="frame f3"><span class="cap">待冲印</span></div>' +
            '<div class="frame f4"><span class="cap">待冲印</span></div>';
   }
 
-  // 悬停胶片条时，垂直滚轮 → 横向滚动（到尽头交还页面滚动）
+  // 悬停胶片条时，滚轮 → 横向滚动（动画期间锁定，到尽头交还页面滚动）
   if (filmStrip) {
     filmStrip.addEventListener('wheel', function (e) {
+      if (animating) { e.preventDefault(); return; }
       var canRight = filmStrip.scrollLeft + filmStrip.clientWidth < filmStrip.scrollWidth - 1;
       var canLeft = filmStrip.scrollLeft > 0;
       var dx = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
@@ -42,21 +45,30 @@
       if (!files.length) { stripEl.innerHTML = placeholder(); return; }
       if (countEl) countEl.textContent = 'ROLL 01 — ' + files.length + ' EXP';
 
-      stripEl.innerHTML = files.map(function (f) {
+      // 片头（leader）在最前，随后依次是照片
+      stripEl.innerHTML = '<div class="leader"></div>' + files.map(function (f) {
         var url = NW.rawBase + NW.encodePath(f.path) + NW.cacheBust();
         return '<div class="frame"><img src="' + url + '" alt="' + NW.escapeHtml(f.name) + '"></div>';
       }).join('');
 
       buildStrip();
+      setupExtractAnim();
     })
     .catch(function () { stripEl.innerHTML = placeholder(); });
 
   function buildStrip() {
-    // 齿孔（圆角矩形，参考 135 胶片：间距 23.75px、孔宽 10.44px）
+    // 齿孔（圆角矩形，间距 23.75px）：
+    // 上排从片头曲线脚（184px）后开始（上半被舌形轮廓裁掉）；
+    // 下排在舌部完整保留（从最左起排）——与参考实现一致。
+    // 孔数精确收敛在内容宽度内，避免溢出把 scrollWidth 撑大（否则滚动末端照片与暗盒间出现空隙）
     var perfRows = document.querySelectorAll('.perf-row');
     var pitch = 23.75;
-    var holeCount = Math.ceil((stripEl.scrollWidth + 24) / pitch);
+    var holeW = 10.44;
+    var stripW = stripEl.scrollWidth;
     perfRows.forEach(function (row) {
+      var startX = row.classList.contains('bottom') ? 5 : 184;
+      var usable = stripW - startX - holeW - 5;
+      var holeCount = Math.max(0, Math.floor(usable / pitch) + 1);
       for (var i = 0; i < holeCount; i++) {
         var hole = document.createElement('i');
         row.appendChild(hole);
@@ -105,6 +117,41 @@
         num.style.width = fr.width + 'px';
         numRow.appendChild(num);
       });
+    }
+  }
+
+  // 抽出动画：初次下滑到胶片匣时，胶片从右侧暗盒中抽出
+  function setupExtractAnim() {
+    var strip = document.getElementById('film-strip');
+    var content = document.querySelector('.strip-content');
+    var sec = document.querySelector('.film-sec');
+    if (!strip || !content || !sec) return;
+    var D = strip.clientWidth - 200; // 让片头（184px 宽）初始收在暗盒一侧
+    if (D <= 0) return;
+
+    animating = true;
+    content.style.transform = 'translateX(' + D + 'px)';
+    void content.offsetWidth; // 强制重排，确保初始偏移先生效
+
+    function play() {
+      content.style.transition = 'transform 1.8s cubic-bezier(.16,.64,.36,1)';
+      content.style.transform = 'translateX(0)';
+      setTimeout(function () {
+        animating = false;
+        content.style.transition = '';
+        content.style.transform = '';
+      }, 1900);
+    }
+
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { play(); io.disconnect(); }
+        });
+      }, { threshold: 0.35 });
+      io.observe(sec);
+    } else {
+      play();
     }
   }
 })();

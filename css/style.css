@@ -146,20 +146,27 @@ nav a:hover, nav a.active { color: var(--accent); }
 .film .stamp { position: absolute; top: -16px; right: 14px; transform: rotate(8deg); z-index: 2; }
 .film .stamp .doodle-note { display: block; text-align: center; margin-top: -2px; }
 .film-strip {
-  background: linear-gradient(180deg,#231e19 0%,#161311 12%,#191512 50%,#151210 88%,#241f1a 100%);
-  border: 1px solid #2c2c2c; border-radius: 5px; padding: 0;
+  background: none; border: 1px solid transparent; border-radius: 5px; padding: 0;
   overflow-x: auto; height: 175px; scrollbar-width: none;
 }
 .film-strip::-webkit-scrollbar { display: none; }
-.strip-content { display: flex; flex-direction: column; height: 173px; width: max-content; min-height: 0; }
+.strip-content { display: flex; flex-direction: column; height: 173px; width: max-content; min-height: 0; position: relative; }
+/* 胶片条背景层：轮廓含片头舌形（上半裁掉 + S 曲线过渡），片头区域纯黑 */
+.strip-bg {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(90deg, #060504 0 184px, rgba(0,0,0,0) 184px),
+    linear-gradient(180deg,#231e19 0%,#161311 12%,#191512 50%,#151210 88%,#241f1a 100%);
+  clip-path: polygon(0px 101px, 6px 86px, 18px 83px, 101px 83px, 126px 70px, 142px 42px, 159px 13px, 184px 0px, 100% 0px, 100% 100%, 18px 100%, 6px 170px, 0px 155px);
+}
 .band { height: 27.5px; flex: none; position: relative; }
-.perf-row { display: flex; gap: 13.31px; position: absolute; left: 5px; right: 0; bottom: 2px; }
-.perf-row.bottom { top: 2px; bottom: auto; }
+.perf-row { display: flex; gap: 13.31px; position: absolute; left: 5px; right: 0; bottom: 2px; padding-left: 179px; z-index: 2; }
+.perf-row.bottom { top: 2px; bottom: auto; padding-left: 0; }
 .perf-row i { width: 10.44px; height: 13.68px; border-radius: 3px; background: var(--perf-hole, #1a1512); flex: none; box-shadow: inset 0 2px 3px rgba(40,30,18,.4); }
-.edge { position: absolute; left: 6px; top: 2px; font-family: "Courier New", monospace; font-weight: 700; font-size: 11px; color: #e09a3e; letter-spacing: 1px; white-space: nowrap; }
+.edge { position: absolute; left: 190px; top: 2px; font-family: "Courier New", monospace; font-weight: 700; font-size: 11px; color: #e09a3e; letter-spacing: 1px; white-space: nowrap; }
 .edge-num-row { position: absolute; left: 0; right: 0; top: 0; bottom: 0; pointer-events: none; }
-.edge-num { position: absolute; top: 50%; transform: translateY(-50%); text-align: center; font-family: "Courier New", monospace; font-weight: 700; font-size: 11px; color: #e09a3e; }
-.frames { flex: 1; display: flex; gap: 10px; align-items: center; min-height: 0; }
+.edge-num { position: absolute; top: 50%; transform: translateY(-50%); text-align: left; padding-left: 2px; font-family: "Courier New", monospace; font-weight: 700; font-size: 11px; color: #e09a3e; }
+.frames { flex: 1; display: flex; gap: 10px; align-items: center; min-height: 0; position: relative; }
 .frame {
   width: 174px; height: 116px; position: relative; border: 1px solid #000; flex: none;
   background-color: #1b1b1b; background-size: cover; background-position: center; border-radius: 2px; overflow: hidden;
@@ -172,6 +179,16 @@ nav a:hover, nav a.active { color: var(--accent); }
 .canister { flex: none; width: 140px; height: 210px; margin-left: 0; position: relative; box-shadow: 0 8px 18px rgba(0,0,0,.35); }
 .canister .svg { width: 100%; height: 100%; display: block; }
 .canister::before { content: ""; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 10px; height: 175px; background: #080808; border-radius: 2px; }
+
+/* 片头（leader）：只做占位（一帧宽 184px），舌形视觉由 .strip-bg 的轮廓裁剪呈现 */
+.leader { flex: none; width: 184px; height: 116px; }
+
+/* 移动端：暗盒移出屏幕右缘，仅留 1/8 暗示有暗盒 */
+@media (max-width: 720px) {
+  .film { overflow: hidden; }
+  .film-body { position: relative; }
+  .canister { position: absolute; right: -122px; top: 50%; transform: translateY(-50%); }
+}
 
 /* ---------- 手记列表（文章流） ---------- */
 .exposure { padding: 60px 0 80px; }
