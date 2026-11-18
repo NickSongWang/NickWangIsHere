@@ -14,7 +14,6 @@
 | `cases.html` | 案例经验卡片（问题卡 / 经验卡） |
 | `projects.html` | DIY 电子项目墙 |
 | `toolbox.html` | 工具箱（全屏窗口系统，内置 dB 换算器等工具） |
-| `private.html` | 私密页 |
 
 全站特性：
 
@@ -34,7 +33,6 @@
 ├── cases.html            # 案例经验
 ├── projects.html         # 项目墙
 ├── toolbox.html          # 工具箱
-├── private.html          # 私密页
 │
 ├── articles/             # ★ 手记 Markdown（一夹一篇或散装 .md）
 │   └── 2026-08-06-gyrator/
