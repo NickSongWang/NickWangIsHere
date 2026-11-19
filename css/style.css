@@ -113,7 +113,7 @@ nav a:hover, nav a.active { color: var(--accent); }
 .hero-inner { position: relative; padding: 0 0 64px; width: 100%; }
 .hero .kicker { font-family: var(--serif); font-size: 12px; letter-spacing: 6px; color: var(--accent); }
 .hero h1 { font-family: var(--serif); font-size: clamp(40px,7vw,84px); letter-spacing: 8px; line-height: 1.15; margin: 16px 0 10px; font-weight: 400; }
-.hero .zh { font-size: 15px; letter-spacing: 10px; color: var(--muted); }
+.hero .zh { font-size: 15px; letter-spacing: 10px; color: var(--muted); position: relative; }
 .hero .doodle-line { width: min(360px,78vw); }
 .exif { margin-top: 26px; font-size: 12px; color: var(--muted); letter-spacing: 1px; display: flex; gap: 22px; flex-wrap: wrap; }
 .exif i { color: var(--accent); font-style: normal; }
@@ -406,6 +406,50 @@ html.darkroom .theme-btn .t-red { display: inline; }
   transition: opacity .25s; box-shadow: 0 4px 18px rgba(0,0,0,.5); white-space: nowrap;
 }
 .press-hint.show { opacity: 1; }
+
+/* ---------- 暗房手写涂鸦彩蛋（红灯下的显影批注） ----------
+   开灯：blur+透明 → 清晰，缓慢显影（延迟 .75s，红灯先亮、字后浮现）；
+   关灯：transition 仅定义在暗房态，离开时无过渡 → 立刻恢复原始状态 */
+.dr-egg { opacity: 0; filter: blur(6px); transition: none; pointer-events: none; }
+html.darkroom .dr-egg { opacity: 1; filter: blur(0); transition: opacity 1.7s ease .75s, filter 1.7s ease .75s; }
+
+/* ① Hero：「的表层世界」涂鸦划掉 + 「黑暗的内心」批注与箭头 */
+.dr-cross { position: relative; display: inline-block; }
+.dr-crossline { position: absolute; left: -3%; top: 10%; width: 106%; height: 82%; overflow: visible; }
+.dr-crossline path { fill: none; stroke: #e05336; stroke-width: 3.2; stroke-linecap: round; }
+.dr-inner {
+  position: absolute; left: calc(100% + 16px); top: -34px;
+  font-family: var(--hand); font-size: 17px; letter-spacing: 3px;
+  color: #e05336; white-space: nowrap; transform: rotate(-5deg);
+}
+.dr-inner-arrow { position: absolute; left: -30px; top: 24px; width: 62px; height: 40px; overflow: visible; transform: rotate(4deg); }
+.dr-inner-arrow path { fill: none; stroke: #e05336; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ② 假期倒计时：大面积涂鸦划掉 + 「我不想上班！」 */
+.dr-cover { position: absolute; inset: -4px; z-index: 3; }
+.dr-cover svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.dr-cover path { fill: none; stroke: #e05336; stroke-linecap: round; }
+.dr-cover-note {
+  position: absolute; right: 30px; top: 50%;
+  transform: translateY(-50%) rotate(-6deg);
+  font-family: var(--hand); font-size: 30px; letter-spacing: 5px; color: #e05336;
+  text-shadow: 0 0 16px rgba(224,60,30,.4); white-space: nowrap;
+}
+
+/* ③ 自我介绍下方：手写小字 */
+.intro .txt { position: relative; }
+.dr-scribble {
+  position: absolute; left: 2px; top: calc(100% + 4px);
+  max-width: 340px; line-height: 1.9;
+  font-family: var(--hand); font-size: 13.5px; letter-spacing: 3px;
+  color: #e05336; transform: rotate(-1.6deg);
+}
+@media (max-width: 640px) {
+  .dr-inner { left: auto; right: 0; top: -36px; font-size: 14px; }
+  .dr-inner-arrow { display: none; }
+  .dr-cover-note { font-size: 22px; right: 16px; }
+  .dr-scribble { max-width: 82vw; font-size: 12.5px; }
+}
 
 /* 红色安全灯光罩：multiply 混合让照片/SVG/文字全部染红，像真实暗房红灯 */
 html.darkroom body::before {
