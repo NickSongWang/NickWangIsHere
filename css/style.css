@@ -435,8 +435,6 @@ html.darkroom .dr-egg { opacity: 1; filter: blur(0); transition: opacity 1.7s ea
   font-family: var(--hand); font-size: 24px; letter-spacing: 5px; color: #0d0b09;
   white-space: nowrap;
 }
-/* 暗房下给下方 EXIF 行让位，避免与手写字重叠（仅暗房态生效，关灯即恢复） */
-html.darkroom .hero .exif { margin-top: 74px; }
 
 /* ③ 自我介绍下方：手写小字（黑色） */
 .intro .txt { position: relative; }
