@@ -17,7 +17,7 @@
   --muted: #8f8a80;
   --accent: #d4a24e;
   --ink: #e8c47a;
-  --perf-hole: #1a1512;
+  --perf-hole: #0b0907;
   --serif: Georgia, "Songti SC", "SimSun", serif;
   --hand: "Kaiti SC", "KaiTi", "STKaiti", serif;
   --hand2: "MSZ Graffiti", "Kaiti SC", "KaiTi", "STKaiti", serif;
@@ -187,7 +187,8 @@ html.darkroom .frame-box .img .avatar-evil {
 .band { height: 27.5px; flex: none; position: relative; }
 .perf-row { display: flex; gap: 13.31px; position: absolute; left: 5px; right: 0; bottom: 2px; padding-left: 179px; z-index: 2; }
 .perf-row.bottom { top: 2px; bottom: auto; padding-left: 0; }
-.perf-row i { width: 10.44px; height: 13.68px; border-radius: 3px; background: var(--perf-hole, #1a1512); flex: none; box-shadow: inset 0 2px 3px rgba(40,30,18,.4); }
+.perf-row i { width: 10.44px; height: 13.68px; border-radius: 3px; background: var(--perf-hole, #1a1512); flex: none; box-shadow: inset 0 2px 3px rgba(0,0,0,.65), 0 0 0 1px rgba(212,162,78,.15), 0 1px 0 rgba(232,196,122,.08); }
+html.light .perf-row i { box-shadow: inset 0 2px 3px rgba(40,30,18,.4); }
 .edge { position: absolute; left: 190px; top: 2px; font-family: "Courier New", monospace; font-weight: 700; font-size: 11px; color: #e09a3e; letter-spacing: 1px; white-space: nowrap; }
 .edge-num-row { position: absolute; left: 0; right: 0; top: 0; bottom: 0; pointer-events: none; }
 .edge-num { position: absolute; top: 50%; transform: translateY(-50%); text-align: left; padding-left: 2px; font-family: "Courier New", monospace; font-weight: 700; font-size: 11px; color: #e09a3e; }
