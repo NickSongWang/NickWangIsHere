@@ -2,11 +2,11 @@
    NickWang 个人网站 · 主题：胶片摄影 × 手绘线条（方案 7）
    暗色胶片基底 + 金色记号笔式手绘点缀
    ============================================================ */
-/* 暗房涂鸦手写字体：马善政楷书（Ma Shan Zheng, OFL 开源）字符子集，
-   仅覆盖涂鸦文案的 26 个字（17KB），本地自托管不依赖 CDN */
+/* 暗房涂鸦手写字体：龙藏体（Long Cang, OFL 开源）硬笔手写风格，
+   字符子集仅覆盖涂鸦文案的 26 个字（约 15KB），本地自托管不依赖 CDN */
 @font-face {
   font-family: 'MSZ Graffiti';
-  src: url('vendor/fonts/mashanzheng-subset.ttf') format('truetype');
+  src: url('vendor/fonts/longcang-subset.ttf') format('truetype');
   font-display: swap;
 }
 :root {
