@@ -1,8 +1,11 @@
 /*
  * heatmap.js — 首页「曝光记录 · EXPOSURE LOG」
- * GitHub 风格的贡献热力图：过去 12 个月，绿方块标识哪些日期发布了手记。
- * 悬停显示日期与篇数；点亮日可点击跳转（单篇直达阅读页，多篇去手记列表）。
- * 数据由 core.js collectPosts 提供，本地预览走本地文件，线上走 GitHub API。
+ * GitHub 风格的贡献热力图：过去 12 个月。
+ * 三板块合并展示：学习文档（绿）/ 经验记录（橙）/ 开源项目（蓝），
+ * 同一天多板块更新时，格子按板块分段拼接（左→右固定顺序）。
+ * 仅作展示：不跳转，悬停显示日期与各板块记录数。
+ * 颜色由 CSS 变量驱动（--hm-a / --hm-c / --hm-p / --hm-empty），自动适配明暗主题。
+ * 数据由 core.js collectPosts 提供，本地预览走本地文件，线上走 index.json。
  */
 (function () {
   'use strict';
@@ -15,15 +18,37 @@
   var GAP = 3;     // 间隔
   var PITCH = CELL + GAP;
 
-  // GitHub dark 配色（空 + 四级绿）
-  var COLORS = ['#1e1e1e', '#0e4429', '#006d32', '#26a641', '#39d353'];
+  var BOARDS = [
+    { key: 'articles', cls: 'hm-a', label: '学习文档' },
+    { key: 'cases',    cls: 'hm-c', label: '经验记录' },
+    { key: 'projects', cls: 'hm-p', label: '开源项目' }
+  ];
 
-  NW.collectPosts('articles')
-    .then(function (posts) {
+  Promise.all(BOARDS.map(function (b) {
+    return NW.collectPosts(b.key).catch(function () { return []; });
+  }))
+    .then(function (lists) {
       if (loading) loading.style.display = 'none';
+
+      // 日期 → { articles: n, cases: n, projects: n }
+      var byDate = {};
+      var totals = [0, 0, 0];
+      lists.forEach(function (posts, i) {
+        (posts || []).forEach(function (p) {
+          var d = (p.date || '').slice(0, 10);
+          if (!/^\d{4}-\d{2}-\d{2}$/.test(d)) return;
+          totals[i]++;
+          var e = byDate[d] = byDate[d] || {};
+          e[BOARDS[i].key] = (e[BOARDS[i].key] || 0) + 1;
+        });
+      });
+
       var count = document.getElementById('hm-count');
-      if (count) count.textContent = '最近 12 个月 · ' + (posts.length) + ' 篇手记';
-      render(box, posts);
+      if (count) {
+        count.textContent = '最近 12 个月 · 学习文档 ' + totals[0]
+          + ' · 经验记录 ' + totals[1] + ' · 开源项目 ' + totals[2];
+      }
+      render(box, byDate);
     })
     .catch(function () {
       if (loading) {
@@ -31,15 +56,7 @@
       }
     });
 
-  function render(el, posts) {
-    // 日期 → 文章列表
-    var byDate = {};
-    (posts || []).forEach(function (p) {
-      var d = (p.date || '').slice(0, 10);
-      if (!/^\d{4}-\d{2}-\d{2}$/.test(d)) return;
-      (byDate[d] = byDate[d] || []).push(p);
-    });
-
+  function render(el, byDate) {
     // 网格范围：从今天回推 52 周的周日开始
     var today = new Date();
     today.setHours(12, 0, 0, 0);
@@ -53,8 +70,9 @@
     var W = leftLabels + weeks * PITCH;
     var H = topLabels + 7 * PITCH;
 
-    var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="' + W + '" height="' + H + '" role="img" aria-label="发布手记的日期热力图">';
-    svg += '<title>过去 12 个月的手记发布记录</title>';
+    var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="' + W + '" height="' + H + '" role="img" aria-label="内容更新日期热力图">';
+    svg += '<title>过去 12 个月的学习文档 / 经验记录 / 开源项目更新记录</title>';
+    var clipId = 0;
 
     // 月份标签
     var lastMonth = -1;
@@ -81,18 +99,34 @@
         day.setDate(day.getDate() + wk * 7 + dow);
         if (day > today) continue;
         var key = day.getFullYear() + '-' + pad(day.getMonth() + 1) + '-' + pad(day.getDate());
-        var n = (byDate[key] || []).length;
-        var level = n === 0 ? 0 : n === 1 ? 1 : n === 2 ? 2 : n === 3 ? 3 : 4;
         var x = leftLabels + wk * PITCH;
         var y = topLabels + dow * PITCH;
-        if (n > 0) {
-          var href = byDate[key].length === 1
-            ? 'article.html?f=' + encodeURIComponent(byDate[key][0].path)
-            : 'blog.html';
-          svg += '<a href="' + href + '"><rect class="hm-cell on" x="' + x + '" y="' + y + '" width="' + CELL + '" height="' + CELL + '" rx="2" fill="' + COLORS[level] + '"><title>' + key + ' · ' + n + ' 篇手记</title></rect></a>';
-        } else {
-          svg += '<rect class="hm-cell" x="' + x + '" y="' + y + '" width="' + CELL + '" height="' + CELL + '" rx="2" fill="' + COLORS[0] + '"><title>' + key + '</title></rect>';
+
+        var active = BOARDS.filter(function (b) {
+          return byDate[key] && byDate[key][b.key] > 0;
+        });
+
+        if (active.length === 0) {
+          svg += '<rect class="hm-cell hm-empty" x="' + x + '" y="' + y + '" width="' + CELL + '" height="' + CELL + '" rx="2"><title>' + key + '</title></rect>';
+          continue;
         }
+
+        // 同一天多板块：按板块顺序左右分段拼色（clip 保证圆角整齐）
+        var cid = 'hmc' + (clipId++);
+        var seg = CELL / active.length;
+        var tip = key + ' · ' + active.map(function (b) {
+          return b.label + ' ×' + byDate[key][b.key];
+        }).join('，');
+        svg += '<clipPath id="' + cid + '"><rect x="' + x + '" y="' + y + '" width="' + CELL + '" height="' + CELL + '" rx="2"/></clipPath>';
+        svg += '<g clip-path="url(#' + cid + ')">';
+        active.forEach(function (b, i) {
+          // 分段多留 0.5px 重叠，避免亚像素缝隙
+          var sw = (i === active.length - 1) ? seg : seg + 0.5;
+          svg += '<rect class="hm-cell ' + b.cls + '" x="' + (x + i * seg) + '" y="' + y + '" width="' + sw + '" height="' + CELL + '"/>';
+        });
+        svg += '</g>';
+        // 透明覆盖层：整格悬停显示统一 tooltip
+        svg += '<rect fill="transparent" x="' + x + '" y="' + y + '" width="' + CELL + '" height="' + CELL + '"><title>' + tip + '</title></rect>';
       }
     }
     svg += '</svg>';

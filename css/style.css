@@ -219,16 +219,33 @@ nav a:hover, nav a.active { color: var(--accent); }
 .essay .meta .tag { display: inline-block; border: 1px solid var(--line); border-radius: 999px; padding: 1px 10px; font-size: 11px; letter-spacing: 1px; }
 .essay .sum { font-size: 13.5px; color: var(--muted); margin-top: 8px; }
 
-/* ---------- 曝光记录热力图（GitHub 风格） ---------- */
+/* ---------- 曝光记录热力图（GitHub 风格 · 三板块分色） ---------- */
+/* 热力图配色：学习文档=绿 / 经验记录=橙 / 开源项目=蓝。
+   两套色值分别针对深浅底调校，保证彼此可辨、与底色对比充足 */
+:root {
+  --hm-a: #3fb950;   /* 学习文档 · 绿 */
+  --hm-c: #f0883e;   /* 经验记录 · 橙 */
+  --hm-p: #58a6ff;   /* 开源项目 · 蓝 */
+  --hm-empty: #1e1e1e;
+}
+html.light {
+  --hm-a: #1a7f37;   /* 浅底加深，避免少量记录与米白底难以区分 */
+  --hm-c: #bc4c00;
+  --hm-p: #0969da;
+  --hm-empty: #e0d7c2;
+}
 .hm-scroll { overflow-x: auto; margin-top: 4px; }
 .heatmap { display: inline-block; }
 .heatmap text { font-family: var(--sans); font-size: 10px; fill: var(--muted); }
-.heatmap .hm-cell { stroke: rgba(255,255,255,.04); stroke-width: 1; }
-.heatmap .hm-cell.on { cursor: pointer; transition: .15s; }
-.heatmap .hm-cell.on:hover { stroke: var(--accent); }
+.heatmap .hm-cell { stroke: rgba(128,128,128,.15); stroke-width: 1; transition: .15s; }
+.heatmap .hm-cell:hover { stroke: var(--accent); }
+.heatmap .hm-empty { fill: var(--hm-empty); }
+.heatmap .hm-a { fill: var(--hm-a); }
+.heatmap .hm-c { fill: var(--hm-c); }
+.heatmap .hm-p { fill: var(--hm-p); }
 .hm-legend { margin-top: 14px; font-size: 12px; color: var(--muted); display: flex; align-items: center; flex-wrap: wrap; }
-.hm-legend .sw { display: inline-block; width: 11px; height: 11px; border-radius: 2px; margin: 0 3px; }
-.hm-legend a { color: var(--accent); text-decoration: none; border-bottom: 1px dotted var(--accent); margin-left: 14px; }
+.hm-legend .hm-key { display: inline-flex; align-items: center; margin-right: 18px; }
+.hm-legend .sw { display: inline-block; width: 11px; height: 11px; border-radius: 2px; margin-right: 6px; }
 
 /* ---------- 联系 ---------- */
 .contact { border-top: 1px solid var(--line); padding: 80px 0; text-align: center; position: relative; }
