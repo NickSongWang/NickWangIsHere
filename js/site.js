@@ -10,14 +10,7 @@
   var y = document.getElementById('y');
   if (y) y.textContent = new Date().getFullYear();
 
-  // 明暗主题切换（浅色/深色，localStorage 持久化）
-  var themeBtn = document.getElementById('themeBtn');
-  if (themeBtn) {
-    themeBtn.addEventListener('click', function () {
-      var on = document.documentElement.classList.toggle('light');
-      try { localStorage.setItem('nickwang-light', on ? '1' : '0'); } catch (e) { /* ignore */ }
-    });
-  }
+  // 明暗主题 / 暗房模式：统一由 darkroom.js 管理（单击切换 + 长按进暗房）
 
   // 移动端菜单：开合 + 点击链接后自动收起
   var nav = document.getElementById('nav');

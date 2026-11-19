@@ -364,28 +364,8 @@ h1 { font-family: var(--serif); font-size: 28px; margin-bottom: 16px; font-weigh
 .cd-note { margin-top: 10px; font-size: 11.5px; color: var(--muted); letter-spacing: .5px; }
 .cd-note b { color: var(--ink); font-weight: 400; }
 
-/* ---------- 暗房红灯模式（SAFELIGHT） ---------- */
+/* ---------- 模式控制按钮（明暗切换 + 暗房长按，全站唯一） ---------- */
 .nav-right { display: flex; align-items: center; gap: 18px; }
-.darkroom-btn {
-  display: inline-flex; align-items: center; gap: 7px; flex: none;
-  background: none; border: 1px solid var(--line); border-radius: 999px;
-  padding: 5px 14px; cursor: pointer;
-  font-family: var(--hand); font-size: 13px; letter-spacing: 2px; color: var(--muted);
-  transition: color .3s, border-color .3s;
-}
-.darkroom-btn:hover { border-color: var(--accent); color: var(--ink); }
-.darkroom-btn svg { width: 16px; height: 16px; overflow: visible; }
-.darkroom-btn .bulb-off { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; transition: fill .4s; }
-.darkroom-btn .bulb-rays { opacity: .75; transition: opacity .4s; }
-.darkroom-btn .bulb-rays line { stroke: currentColor; stroke-width: 1.3; stroke-linecap: round; }
-.darkroom-btn .t-on { display: none; }
-html.darkroom .darkroom-btn { border-color: rgba(255,96,64,.55); color: #ff9d84; }
-html.darkroom .darkroom-btn .bulb-off { fill: rgba(255,84,56,.30); }
-html.darkroom .darkroom-btn .bulb-rays { opacity: 1; }
-html.darkroom .darkroom-btn .t-on { display: inline; }
-html.darkroom .darkroom-btn .t-off { display: none; }
-
-/* ---------- 明暗主题切换按钮 ---------- */
 .theme-btn {
   display: inline-flex; align-items: center; gap: 7px; flex: none;
   background: none; border: 1px solid var(--line); border-radius: 999px;
@@ -396,9 +376,23 @@ html.darkroom .darkroom-btn .t-off { display: none; }
 .theme-btn:hover { border-color: var(--accent); color: var(--ink); }
 .theme-btn svg { width: 16px; height: 16px; overflow: visible; }
 .theme-btn .sun, .theme-btn .sun-rays { fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; }
-.theme-btn .t-dark { display: none; }
-html.light .theme-btn .t-light { display: none; }
-html.light .theme-btn .t-dark { display: inline; }
+/* 按钮文字显示当前状态：暗室→「暗室」，明室→「明室」，暗房→「暗房」 */
+.theme-btn .t-light, .theme-btn .t-red { display: none; }
+html.light .theme-btn .t-dark { display: none; }
+html.light .theme-btn .t-light { display: inline; }
+html.darkroom .theme-btn { border-color: rgba(255,96,64,.55); color: #ff9d84; }
+html.darkroom .theme-btn .t-dark, html.darkroom .theme-btn .t-light { display: none; }
+html.darkroom .theme-btn .t-red { display: inline; }
+
+/* 「长按试一下」提示气泡（暗室悬停模式按钮时，跟随光标） */
+.press-hint {
+  position: fixed; z-index: 2147480001;
+  background: #150504; border: 1px solid rgba(255,96,64,.5); border-radius: 999px;
+  padding: 5px 14px; font-family: var(--hand); font-size: 12.5px; letter-spacing: 2px;
+  color: #ffb3a0; opacity: 0; pointer-events: none;
+  transition: opacity .25s; box-shadow: 0 4px 18px rgba(0,0,0,.5); white-space: nowrap;
+}
+.press-hint.show { opacity: 1; }
 
 /* 红色安全灯光罩：multiply 混合让照片/SVG/文字全部染红，像真实暗房红灯 */
 html.darkroom body::before {
