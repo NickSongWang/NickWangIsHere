@@ -293,10 +293,32 @@ html.light {
 .contact .links a { border-bottom: 1px dotted var(--muted); text-decoration: none; }
 .contact .links a:hover { color: var(--accent); border-color: var(--accent); }
 
+/* ---------- 串门 · 友链（手绘门票卡片） ---------- */
+.friends { padding: 0 0 24px; }
+.fl-row { display: flex; flex-wrap: wrap; gap: 16px; }
+.fl-card {
+  flex: 1 1 220px; min-width: 200px; max-width: 320px;
+  padding: 16px 18px 14px; text-decoration: none; color: var(--txt);
+  background: var(--panel); border: 1.5px solid var(--line);
+  /* 不规则圆角模拟手绘抖动边框 */
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+.fl-card:hover {
+  transform: rotate(-1.4deg) translateY(-2px);
+  border-color: var(--accent);
+  box-shadow: 4px 5px 0 rgba(212,162,78,.16);
+}
+.fl-card b { display: block; font-family: var(--serif); font-size: 15px; font-weight: 400; letter-spacing: 1px; color: var(--txt); transition: color .18s ease; }
+.fl-card i { display: block; font-style: normal; font-size: 12px; line-height: 1.6; color: var(--muted); margin-top: 5px; }
+.fl-card em { display: block; font-style: normal; font-family: "Courier New", monospace; font-size: 11px; letter-spacing: .5px; color: var(--accent); margin-top: 8px; }
+.fl-card:hover b { color: var(--accent); }
+
 /* ---------- 页脚 ---------- */
 .site-footer { border-top: 1px solid var(--line); padding: 26px 0 60px; font-size: 12px; color: var(--muted); }
 .site-footer .container { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; letter-spacing: 2px; }
-.site-footer a { text-decoration: none; }
+.site-footer a { text-decoration: none; color: var(--muted); border-bottom: 1px dotted var(--muted); }
+.site-footer a:hover { color: var(--accent); border-color: var(--accent); }
 
 /* ---------- 通用正文 / 主区 ---------- */
 main { padding: 48px 20px 64px; }
