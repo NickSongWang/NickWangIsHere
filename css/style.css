@@ -366,6 +366,9 @@ h1 { font-family: var(--serif); font-size: 28px; margin-bottom: 16px; font-weigh
   border: 1px solid var(--line); background: rgba(26,26,26,.5); backdrop-filter: blur(6px);
   padding: 16px 20px 14px; }
 .cd-panel::before { content: ""; position: absolute; inset: 5px; border: 1px solid rgba(212,162,78,.28); pointer-events: none; }
+/* 明室：倒计时卡片改暖白相纸底，与浅色主题协调 */
+html.light .cd-panel { background: rgba(255,253,247,.65); }
+html.light .cd-panel::before { border-color: rgba(168,120,42,.30); }
 .cd-stamp { position: absolute; top: -14px; right: 14px; transform: rotate(8deg); text-align: center; z-index: 2; }
 .cd-stamp .doodle-star { width: 32px; height: 32px; }
 .cd-stamp .doodle-star path { fill: none; stroke: var(--ink); stroke-width: 2.6; stroke-linejoin: round; transition: .4s; }
