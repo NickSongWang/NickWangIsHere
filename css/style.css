@@ -201,7 +201,7 @@ html.darkroom .frame-box .img .avatar-evil {
 .f2 { background-image: linear-gradient(200deg,#39434f,#1f2730 60%,#10141a); }
 .f3 { background-image: linear-gradient(140deg,#6e5136,#3a2c1c 60%,#1c150d); }
 .f4 { background-image: linear-gradient(170deg,#2f3d33,#1a241d 60%,#0e120e); }
-.canister { flex: none; width: 140px; height: 210px; margin-left: 0; position: relative; box-shadow: 0 8px 18px rgba(0,0,0,.35); }
+.canister { flex: none; width: 140px; height: 210px; margin-left: 0; position: relative; }
 .canister .svg { width: 100%; height: 100%; display: block; }
 .canister::before { content: ""; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 10px; height: 175px; background: #080808; border-radius: 2px; }
 
