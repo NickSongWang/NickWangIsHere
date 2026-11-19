@@ -2,7 +2,8 @@
  * heatmap.js — 首页「曝光记录 · EXPOSURE LOG」
  * GitHub 风格的贡献热力图：过去 12 个月。
  * 三板块合并展示：学习文档（绿）/ 经验记录（橙）/ 开源项目（蓝），
- * 同一天多板块更新时，格子按板块分段拼接（左→右固定顺序）。
+ * 同一天多板块更新时，格子按板块分段拼接（左→右固定顺序）；
+ * 每板块 4 级色阶区分当日更新数量（1/2/3/4+ 篇，深色模式越亮、浅色模式越深）。
  * 仅作展示：不跳转，悬停显示日期与各板块记录数。
  * 颜色由 CSS 变量驱动（--hm-a / --hm-c / --hm-p / --hm-empty），自动适配明暗主题。
  * 数据由 core.js collectPosts 提供，本地预览走本地文件，线上走 index.json。
@@ -111,7 +112,8 @@
           continue;
         }
 
-        // 同一天多板块：按板块顺序左右分段拼色（clip 保证圆角整齐）
+        // 同一天多板块：按板块顺序左右分段拼色（clip 保证圆角整齐）；
+        // 每段按该板块当日记录数分 4 级色阶（1/2/3/4+ 篇）
         var cid = 'hmc' + (clipId++);
         var seg = CELL / active.length;
         var tip = key + ' · ' + active.map(function (b) {
@@ -120,9 +122,11 @@
         svg += '<clipPath id="' + cid + '"><rect x="' + x + '" y="' + y + '" width="' + CELL + '" height="' + CELL + '" rx="2"/></clipPath>';
         svg += '<g clip-path="url(#' + cid + ')">';
         active.forEach(function (b, i) {
+          var n = byDate[key][b.key];
+          var lv = n >= 4 ? 4 : n; // 1/2/3/4+ → lv1..lv4
           // 分段多留 0.5px 重叠，避免亚像素缝隙
           var sw = (i === active.length - 1) ? seg : seg + 0.5;
-          svg += '<rect class="hm-cell ' + b.cls + '" x="' + (x + i * seg) + '" y="' + y + '" width="' + sw + '" height="' + CELL + '"/>';
+          svg += '<rect class="hm-cell ' + b.cls + ' lv' + lv + '" x="' + (x + i * seg) + '" y="' + y + '" width="' + sw + '" height="' + CELL + '"/>';
         });
         svg += '</g>';
         // 透明覆盖层：整格悬停显示统一 tooltip
