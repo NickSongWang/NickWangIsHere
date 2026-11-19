@@ -2,6 +2,13 @@
    NickWang 个人网站 · 主题：胶片摄影 × 手绘线条（方案 7）
    暗色胶片基底 + 金色记号笔式手绘点缀
    ============================================================ */
+/* 暗房涂鸦手写字体：马善政楷书（Ma Shan Zheng, OFL 开源）字符子集，
+   仅覆盖涂鸦文案的 26 个字（17KB），本地自托管不依赖 CDN */
+@font-face {
+  font-family: 'MSZ Graffiti';
+  src: url('vendor/fonts/mashanzheng-subset.ttf') format('truetype');
+  font-display: swap;
+}
 :root {
   --bg: #121212;
   --panel: #1a1a1a;
@@ -13,6 +20,7 @@
   --perf-hole: #1a1512;
   --serif: Georgia, "Songti SC", "SimSun", serif;
   --hand: "Kaiti SC", "KaiTi", "STKaiti", serif;
+  --hand2: "MSZ Graffiti", "Kaiti SC", "KaiTi", "STKaiti", serif;
   --sans: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
 }
 
@@ -419,7 +427,7 @@ html.darkroom .dr-egg { opacity: 1; filter: blur(0); transition: opacity 1.7s ea
 .dr-crossline path { fill: none; stroke: #0d0b09; stroke-width: 3.2; stroke-linecap: round; }
 .dr-inner {
   position: absolute; left: calc(100% + 16px); top: -34px;
-  font-family: var(--hand); font-size: 17px; letter-spacing: 3px;
+  font-family: var(--hand2), var(--hand); font-size: 17px; letter-spacing: 3px;
   color: #0d0b09; white-space: nowrap; transform: rotate(-5deg);
 }
 .dr-inner-arrow { position: absolute; left: -30px; top: 24px; width: 62px; height: 40px; overflow: visible; transform: rotate(4deg); }
@@ -430,9 +438,9 @@ html.darkroom .dr-egg { opacity: 1; filter: blur(0); transition: opacity 1.7s ea
 .dr-cover svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 .dr-cover path { fill: none; stroke: #0d0b09; stroke-linecap: round; }
 .dr-cover-note {
-  position: absolute; left: 26px; top: calc(100% + 10px);
+  position: absolute; right: 22px; bottom: 8px;
   transform: rotate(-3deg);
-  font-family: var(--hand); font-size: 24px; letter-spacing: 5px; color: #0d0b09;
+  font-family: var(--hand2), var(--hand); font-size: 24px; letter-spacing: 5px; color: #0d0b09;
   white-space: nowrap;
 }
 
@@ -441,7 +449,7 @@ html.darkroom .dr-egg { opacity: 1; filter: blur(0); transition: opacity 1.7s ea
 .dr-scribble {
   position: absolute; left: 2px; top: calc(100% + 4px);
   max-width: 340px; line-height: 1.9;
-  font-family: var(--hand); font-size: 13.5px; letter-spacing: 3px;
+  font-family: var(--hand2), var(--hand); font-size: 13.5px; letter-spacing: 3px;
   color: #0d0b09; transform: rotate(-1.6deg);
 }
 @media (max-width: 640px) {
